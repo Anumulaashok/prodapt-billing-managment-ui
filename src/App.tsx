@@ -6,6 +6,15 @@ import { Layout } from './components/Layout';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { ComingSoon } from './pages/ComingSoon';
+import { AccountList } from './pages/accounts/AccountList';
+import { AccountDetail } from './pages/accounts/AccountDetail';
+import { AccountForm } from './pages/accounts/AccountForm';
+import { BundleDetail } from './pages/subscriptions/BundleDetail';
+import { CreateSubscription } from './pages/subscriptions/CreateSubscription';
+import { InvoiceList } from './pages/invoices/InvoiceList';
+import { InvoiceDetail } from './pages/invoices/InvoiceDetail';
+import { PaymentList } from './pages/payments/PaymentList';
+import { PaymentDetail } from './pages/payments/PaymentDetail';
 
 function App() {
   return (
@@ -18,10 +27,22 @@ function App() {
             <Route element={<RequireAuth />}>
               <Route element={<Layout />}>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/accounts" element={<ComingSoon title="Accounts" />} />
+
+                <Route path="/accounts" element={<AccountList />} />
+                <Route path="/accounts/new" element={<AccountForm />} />
+                <Route path="/accounts/:accountId" element={<AccountDetail />} />
+                <Route path="/accounts/:accountId/edit" element={<AccountForm />} />
+                <Route path="/accounts/:accountId/bundles/:bundleId" element={<BundleDetail />} />
+                <Route path="/accounts/:accountId/subscriptions/new" element={<CreateSubscription />} />
+
                 <Route path="/subscriptions" element={<ComingSoon title="Subscriptions" />} />
-                <Route path="/invoices" element={<ComingSoon title="Invoices" />} />
-                <Route path="/payments" element={<ComingSoon title="Payments" />} />
+
+                <Route path="/invoices" element={<InvoiceList />} />
+                <Route path="/invoices/:invoiceId" element={<InvoiceDetail />} />
+
+                <Route path="/payments" element={<PaymentList />} />
+                <Route path="/payments/:paymentId" element={<PaymentDetail />} />
+
                 <Route path="/admin" element={<ComingSoon title="Admin" />} />
                 <Route path="*" element={<ComingSoon title="Not found" />} />
               </Route>

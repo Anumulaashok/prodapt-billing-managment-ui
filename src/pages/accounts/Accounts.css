@@ -1,0 +1,267 @@
+.accounts-page {
+  max-width: 1080px;
+}
+
+.accounts-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.accounts-page__header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--prodapt-text-dark);
+}
+
+.accounts-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: var(--prodapt-radius);
+  border: 1px solid var(--prodapt-border);
+  background: var(--prodapt-surface);
+  color: var(--prodapt-text-dark);
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.accounts-btn:hover {
+  border-color: var(--prodapt-accent);
+}
+
+.accounts-btn--primary {
+  background: var(--prodapt-accent);
+  border-color: var(--prodapt-accent);
+  color: var(--prodapt-text-inverse);
+}
+
+.accounts-btn--primary:hover {
+  background: var(--prodapt-accent-hover);
+}
+
+.accounts-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.accounts-search {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.accounts-search input {
+  flex: 1;
+  max-width: 360px;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--prodapt-radius);
+  border: 1px solid var(--prodapt-border);
+  font-size: 0.875rem;
+}
+
+.accounts-error {
+  color: var(--prodapt-danger);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.accounts-muted {
+  color: var(--prodapt-text-muted);
+}
+
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--prodapt-surface);
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  overflow: hidden;
+}
+
+.accounts-table th,
+.accounts-table td {
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+  border-bottom: 1px solid var(--prodapt-border);
+}
+
+.accounts-table th {
+  color: var(--prodapt-text-muted);
+  font-weight: 600;
+  background: var(--prodapt-bg);
+}
+
+.accounts-table__row {
+  cursor: pointer;
+}
+
+.accounts-table__row:hover {
+  background: var(--prodapt-bg);
+}
+
+.accounts-table__empty {
+  text-align: center;
+  color: var(--prodapt-text-muted);
+  padding: 1.5rem;
+}
+
+/* Form (create/edit) */
+.accounts-form {
+  background: var(--prodapt-surface);
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  padding: 1.5rem;
+  max-width: 640px;
+}
+
+.accounts-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.accounts-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.accounts-form__field label {
+  font-size: 0.8rem;
+  color: var(--prodapt-text-muted);
+}
+
+.accounts-form__field input,
+.accounts-form__field select {
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--prodapt-radius);
+  border: 1px solid var(--prodapt-border);
+  font-size: 0.875rem;
+}
+
+.accounts-form__actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Detail page */
+.account-detail__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.account-detail__header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  color: var(--prodapt-text-dark);
+}
+
+.account-detail__subtitle {
+  color: var(--prodapt-text-muted);
+  font-size: 0.875rem;
+}
+
+.account-detail__tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--prodapt-border);
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.account-detail__tab {
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: var(--prodapt-text-muted);
+}
+
+.account-detail__tab--active {
+  color: var(--prodapt-text-dark);
+  border-bottom-color: var(--prodapt-accent);
+  font-weight: 600;
+}
+
+.account-detail__tab--locked {
+  color: var(--prodapt-locked);
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.account-detail__panel {
+  background: var(--prodapt-surface);
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  padding: 1.25rem;
+}
+
+.account-detail__info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.account-detail__info-item label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--prodapt-text-muted);
+  margin-bottom: 0.15rem;
+}
+
+.account-detail__info-item div {
+  font-size: 0.9rem;
+  color: var(--prodapt-text-dark);
+}
+
+.account-detail__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.account-detail__list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--prodapt-border);
+  font-size: 0.875rem;
+}
+
+.account-detail__list-item:last-child {
+  border-bottom: none;
+}
+
+.account-detail__add-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.account-detail__add-row input,
+.account-detail__add-row select {
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--prodapt-radius);
+  border: 1px solid var(--prodapt-border);
+  font-size: 0.85rem;
+}
+
+.account-detail__remove-btn {
+  background: none;
+  border: none;
+  color: var(--prodapt-danger);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
