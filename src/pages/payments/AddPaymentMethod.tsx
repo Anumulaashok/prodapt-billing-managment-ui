@@ -11,9 +11,9 @@
  * expiry / bank-account style field anywhere in the backend to build a form
  * around.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
-import { createPaymentMethod } from '../../api/payments';
+import { createPaymentMethod, listPaymentPlugins } from '../../api/payments';
 import type { PaymentMethod } from '../../api/payments';
 import { ApiError } from '../../api/client';
 import './Payments.css';
@@ -25,10 +25,21 @@ export interface AddPaymentMethodProps {
 }
 
 export function AddPaymentMethod({ accountId, onCreated, onCancel }: AddPaymentMethodProps) {
+  const [plugins, setPlugins] = useState<string[]>([]);
+  const [pluginsError, setPluginsError] = useState<string | null>(null);
   const [pluginName, setPluginName] = useState('');
   const [externalKey, setExternalKey] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    listPaymentPlugins()
+      .then((names) => {
+        setPlugins(names);
+        if (names.length === 1) setPluginName(names[0]);
+      })
+      .catch(() => setPluginsError('Unable to load available payment plugins.'));
+  }, []);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -55,15 +66,21 @@ export function AddPaymentMethod({ accountId, onCreated, onCancel }: AddPaymentM
   return (
     <form className="payments-form" onSubmit={handleSubmit}>
       <div className="payments-form__field">
-        <label htmlFor="pm-plugin-name">Plugin Name</label>
-        <input
+        <label htmlFor="pm-plugin-name">Plugin</label>
+        {pluginsError && <div className="payments-error">{pluginsError}</div>}
+        <select
           id="pm-plugin-name"
-          type="text"
-          placeholder="e.g. mock-payment-plugin"
           value={pluginName}
           onChange={(e) => setPluginName(e.target.value)}
           required
-        />
+        >
+          <option value="">Select a payment plugin…</option>
+          {plugins.map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="payments-form__field">

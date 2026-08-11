@@ -127,6 +127,11 @@ export function chargebackPayment(paymentId: string, amount?: number): Promise<P
 // Payment methods
 // ---------------------------------------------------------------------------
 
+/** GET /1.0/kb/paymentMethods/plugins — registered plugin names, for the "add payment method" dropdown. */
+export function listPaymentPlugins(): Promise<string[]> {
+  return apiGet<string[]>('/1.0/kb/paymentMethods/plugins');
+}
+
 /** GET /1.0/kb/accounts/{accountId}/paymentMethods */
 export function listPaymentMethods(accountId: string): Promise<PaymentMethod[]> {
   return apiGet<PaymentMethod[]>(
