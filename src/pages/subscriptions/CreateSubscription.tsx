@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ApiError } from '../../api/client';
 import { createSubscription, getPlans } from '../../api/subscriptions';
 import type { Plan } from '../../api/subscriptions';
+import { useAuth } from '../../context/AuthContext';
+import { LockedBadge } from '../../components/Locked';
 import './BundleList.css';
 
 /**
@@ -20,6 +22,8 @@ export function CreateSubscription() {
   const [externalKey, setExternalKey] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { hasPermission } = useAuth();
+  const canCreateSubscription = hasPermission('subscription:create');
 
   useEffect(() => {
     getPlans()
@@ -84,9 +88,16 @@ export function CreateSubscription() {
         </label>
 
         <div>
-          <button type="submit" className="bundle-detail__action-btn" disabled={submitting || !planName}>
-            {submitting ? 'Creating…' : 'Create Subscription'}
-          </button>
+          {canCreateSubscription ? (
+            <button type="submit" className="bundle-detail__action-btn" disabled={submitting || !planName}>
+              {submitting ? 'Creating…' : 'Create Subscription'}
+            </button>
+          ) : (
+            <span className="bundle-detail__locked-action">
+              Create Subscription
+              <LockedBadge tooltip="You don't have permission to do this" />
+            </span>
+          )}
         </div>
       </form>
     </div>

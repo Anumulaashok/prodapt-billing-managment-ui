@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react';
 import { login as loginRequest } from '../api/auth';
 import { AUTH_TOKEN_STORAGE_KEY } from '../api/client';
+import { getMyPermissions } from '../api/admin';
 
 const AUTH_USER_STORAGE_KEY = 'prodapt_auth_user';
 
@@ -13,8 +14,10 @@ export interface CurrentUser {
 interface AuthContextValue {
   currentUser: CurrentUser | null;
   isAuthenticated: boolean;
+  permissions: string[];
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
+  hasPermission: (permission: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -53,12 +56,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!token) return null;
     return loadStoredUser();
   });
+  const [permissions, setPermissions] = useState<string[]>([]);
 
   // Hydrate on mount in case storage changed outside React (other tabs, etc).
   useEffect(() => {
     const token = localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
     if (token) {
-      setCurrentUser(loadStoredUser());
+      const user = loadStoredUser();
+      setCurrentUser(user);
+      if (user && !user.isRoot) {
+        getMyPermissions()
+          .then(setPermissions)
+          .catch(() => setPermissions([]));
+      }
     }
   }, []);
 
@@ -74,22 +84,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
     localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
     setCurrentUser(user);
+
+    if (user.isRoot) {
+      setPermissions([]);
+    } else {
+      try {
+        const perms = await getMyPermissions();
+        setPermissions(perms);
+      } catch {
+        setPermissions([]);
+      }
+    }
   }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
     localStorage.removeItem(AUTH_USER_STORAGE_KEY);
     setCurrentUser(null);
+    setPermissions([]);
   }, []);
+
+  const hasPermission = useCallback(
+    (permission: string): boolean => {
+      if (currentUser?.isRoot) return true;
+      return permissions.includes(permission) || permissions.includes('*');
+    },
+    [currentUser, permissions],
+  );
 
   const value = useMemo<AuthContextValue>(
     () => ({
       currentUser,
       isAuthenticated: currentUser !== null,
+      permissions,
       login,
       logout,
+      hasPermission,
     }),
-    [currentUser, login, logout],
+    [currentUser, permissions, login, logout, hasPermission],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

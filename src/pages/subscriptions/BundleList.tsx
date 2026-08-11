@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { listBundlesForAccount } from '../../api/subscriptions';
 import type { BundleResponse } from '../../api/subscriptions';
 import { ApiError } from '../../api/client';
+import { useAuth } from '../../context/AuthContext';
+import { LockedBadge } from '../../components/Locked';
 import './BundleList.css';
 
 /**
@@ -15,6 +17,8 @@ export function BundleList({ accountId }: { accountId: string }) {
   const [bundles, setBundles] = useState<BundleResponse[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const { hasPermission } = useAuth();
+  const canCreateSubscription = hasPermission('subscription:create');
 
   useEffect(() => {
     let cancelled = false;
@@ -40,9 +44,16 @@ export function BundleList({ accountId }: { accountId: string }) {
     <div className="bundle-list">
       <div className="bundle-list__header">
         <h3 className="bundle-list__title">Bundles</h3>
-        <Link to={`/accounts/${accountId}/subscriptions/new`} className="bundle-list__new-link">
-          + New subscription
-        </Link>
+        {canCreateSubscription ? (
+          <Link to={`/accounts/${accountId}/subscriptions/new`} className="bundle-list__new-link">
+            + New subscription
+          </Link>
+        ) : (
+          <span className="bundle-list__new-link" aria-disabled="true" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+            + New subscription
+            <LockedBadge tooltip="You don't have permission to do this" />
+          </span>
+        )}
       </div>
 
       {loading && <p className="bundle-list__hint">Loading bundles…</p>}

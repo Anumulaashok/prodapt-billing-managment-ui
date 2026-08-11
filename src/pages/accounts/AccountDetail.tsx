@@ -28,6 +28,7 @@ import { InvoiceList } from '../invoices/InvoiceList';
 import { PaymentList } from '../payments/PaymentList';
 import { AuditLog } from '../audit/AuditLog';
 import { LockedBadge } from '../../components/Locked';
+import { useAuth } from '../../context/AuthContext';
 import './Accounts.css';
 
 type TabKey =
@@ -178,6 +179,9 @@ function AccountTagsPanel({ accountId }: { accountId: string }) {
   const [selected, setSelected] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const { hasPermission } = useAuth();
+  const canCreateTag = hasPermission('tag:create');
+  const canDeleteTag = hasPermission('tag:delete');
 
   function reload() {
     setLoading(true);
@@ -226,14 +230,21 @@ function AccountTagsPanel({ accountId }: { accountId: string }) {
         {tags.map((tag) => (
           <li className="account-detail__list-item" key={tag.tagId}>
             <span>{nameFor(tag.tagDefinitionId)}</span>
-            <button className="account-detail__remove-btn" onClick={() => handleRemove(tag.tagId)}>
-              Remove
-            </button>
+            {canDeleteTag ? (
+              <button className="account-detail__remove-btn" onClick={() => handleRemove(tag.tagId)}>
+                Remove
+              </button>
+            ) : (
+              <span aria-disabled="true" style={{ opacity: 0.6, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                Remove
+                <LockedBadge tooltip="You don't have permission to do this" />
+              </span>
+            )}
           </li>
         ))}
       </ul>
       <form className="account-detail__add-row" onSubmit={handleAdd}>
-        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+        <select value={selected} onChange={(e) => setSelected(e.target.value)} disabled={!canCreateTag}>
           <option value="">Select a tag…</option>
           {definitions.map((d) => (
             <option key={d.id} value={d.id}>
@@ -241,9 +252,16 @@ function AccountTagsPanel({ accountId }: { accountId: string }) {
             </option>
           ))}
         </select>
-        <button type="submit" className="accounts-btn" disabled={!selected}>
-          Add Tag
-        </button>
+        {canCreateTag ? (
+          <button type="submit" className="accounts-btn" disabled={!selected}>
+            Add Tag
+          </button>
+        ) : (
+          <span className="accounts-btn" aria-disabled="true" style={{ opacity: 0.6, cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+            Add Tag
+            <LockedBadge tooltip="You don't have permission to do this" />
+          </span>
+        )}
       </form>
     </div>
   );
@@ -255,6 +273,9 @@ function AccountCustomFieldsPanel({ accountId }: { accountId: string }) {
   const [value, setValue] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const { hasPermission } = useAuth();
+  const canCreateCustomField = hasPermission('custom_field:create');
+  const canDeleteCustomField = hasPermission('custom_field:delete');
 
   function reload() {
     setLoading(true);
@@ -300,18 +321,32 @@ function AccountCustomFieldsPanel({ accountId }: { accountId: string }) {
             <span>
               <strong>{f.name}</strong> = {f.value}
             </span>
-            <button className="account-detail__remove-btn" onClick={() => handleRemove(f.customFieldId)}>
-              Remove
-            </button>
+            {canDeleteCustomField ? (
+              <button className="account-detail__remove-btn" onClick={() => handleRemove(f.customFieldId)}>
+                Remove
+              </button>
+            ) : (
+              <span aria-disabled="true" style={{ opacity: 0.6, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                Remove
+                <LockedBadge tooltip="You don't have permission to do this" />
+              </span>
+            )}
           </li>
         ))}
       </ul>
       <form className="account-detail__add-row" onSubmit={handleAdd}>
-        <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-        <input placeholder="Value" value={value} onChange={(e) => setValue(e.target.value)} />
-        <button type="submit" className="accounts-btn" disabled={!name.trim()}>
-          Add
-        </button>
+        <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} disabled={!canCreateCustomField} />
+        <input placeholder="Value" value={value} onChange={(e) => setValue(e.target.value)} disabled={!canCreateCustomField} />
+        {canCreateCustomField ? (
+          <button type="submit" className="accounts-btn" disabled={!name.trim()}>
+            Add
+          </button>
+        ) : (
+          <span className="accounts-btn" aria-disabled="true" style={{ opacity: 0.6, cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+            Add
+            <LockedBadge tooltip="You don't have permission to do this" />
+          </span>
+        )}
       </form>
     </div>
   );

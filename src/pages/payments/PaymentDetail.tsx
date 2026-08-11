@@ -21,6 +21,7 @@ import { chargebackPayment, getPayment, refundPayment } from '../../api/payments
 import type { Payment } from '../../api/payments';
 import { ApiError } from '../../api/client';
 import { LockedBadge } from '../../components/Locked';
+import { useAuth } from '../../context/AuthContext';
 import './Payments.css';
 
 function StatusBadge({ status }: { status: string }) {
@@ -54,6 +55,9 @@ export function PaymentDetail() {
   const [actionSubmitting, setActionSubmitting] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+  const { hasPermission } = useAuth();
+  const canRefund = hasPermission('payment:refund');
+  const canChargeback = hasPermission('chargeback:create');
 
   const load = useCallback(() => {
     if (!paymentId) return;
@@ -156,28 +160,42 @@ export function PaymentDetail() {
         </div>
 
         <div className="payments-actions">
-          <button
-            type="button"
-            className="payments-btn payments-btn--secondary payments-btn--small"
-            onClick={() => {
-              setActionMode(actionMode === 'refund' ? 'none' : 'refund');
-              setActionError(null);
-              setActionSuccess(null);
-            }}
-          >
-            Refund
-          </button>
-          <button
-            type="button"
-            className="payments-btn payments-btn--secondary payments-btn--small"
-            onClick={() => {
-              setActionMode(actionMode === 'chargeback' ? 'none' : 'chargeback');
-              setActionError(null);
-              setActionSuccess(null);
-            }}
-          >
-            Chargeback
-          </button>
+          {canRefund ? (
+            <button
+              type="button"
+              className="payments-btn payments-btn--secondary payments-btn--small"
+              onClick={() => {
+                setActionMode(actionMode === 'refund' ? 'none' : 'refund');
+                setActionError(null);
+                setActionSuccess(null);
+              }}
+            >
+              Refund
+            </button>
+          ) : (
+            <span className="payments-btn payments-btn--secondary payments-btn--small" aria-disabled="true" style={{ opacity: 0.6, cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+              Refund
+              <LockedBadge tooltip="You don't have permission to do this" />
+            </span>
+          )}
+          {canChargeback ? (
+            <button
+              type="button"
+              className="payments-btn payments-btn--secondary payments-btn--small"
+              onClick={() => {
+                setActionMode(actionMode === 'chargeback' ? 'none' : 'chargeback');
+                setActionError(null);
+                setActionSuccess(null);
+              }}
+            >
+              Chargeback
+            </button>
+          ) : (
+            <span className="payments-btn payments-btn--secondary payments-btn--small" aria-disabled="true" style={{ opacity: 0.6, cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+              Chargeback
+              <LockedBadge tooltip="You don't have permission to do this" />
+            </span>
+          )}
         </div>
 
         {actionMode !== 'none' && (

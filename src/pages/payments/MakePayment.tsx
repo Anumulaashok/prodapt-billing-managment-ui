@@ -19,6 +19,8 @@ import { Link } from 'react-router-dom';
 import { listPaymentMethods, payInvoice, purchasePayment } from '../../api/payments';
 import type { Payment, PaymentMethod } from '../../api/payments';
 import { ApiError } from '../../api/client';
+import { useAuth } from '../../context/AuthContext';
+import { LockedBadge } from '../../components/Locked';
 import './Payments.css';
 
 type Mode = 'purchase' | 'invoice';
@@ -44,6 +46,8 @@ export function MakePayment({ accountId, title = 'Make a Payment' }: MakePayment
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Payment | null>(null);
+  const { hasPermission } = useAuth();
+  const canTriggerPayment = hasPermission('payment:trigger_payment');
 
   useEffect(() => {
     listPaymentMethods(accountId)
@@ -188,9 +192,16 @@ export function MakePayment({ accountId, title = 'Make a Payment' }: MakePayment
           )}
 
           <div className="payments-actions">
-            <button type="submit" className="payments-btn" disabled={submitting || methods.length === 0}>
-              {submitting ? 'Submitting…' : 'Make Payment'}
-            </button>
+            {canTriggerPayment ? (
+              <button type="submit" className="payments-btn" disabled={submitting || methods.length === 0}>
+                {submitting ? 'Submitting…' : 'Make Payment'}
+              </button>
+            ) : (
+              <span className="payments-btn" aria-disabled="true" style={{ opacity: 0.6, cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                Make Payment
+                <LockedBadge tooltip="You don't have permission to do this" />
+              </span>
+            )}
           </div>
         </form>
       ) : (
@@ -219,9 +230,16 @@ export function MakePayment({ accountId, title = 'Make a Payment' }: MakePayment
           )}
 
           <div className="payments-actions">
-            <button type="submit" className="payments-btn" disabled={submitting}>
-              {submitting ? 'Submitting…' : 'Pay Invoice'}
-            </button>
+            {canTriggerPayment ? (
+              <button type="submit" className="payments-btn" disabled={submitting}>
+                {submitting ? 'Submitting…' : 'Pay Invoice'}
+              </button>
+            ) : (
+              <span className="payments-btn" aria-disabled="true" style={{ opacity: 0.6, cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                Pay Invoice
+                <LockedBadge tooltip="You don't have permission to do this" />
+              </span>
+            )}
           </div>
         </form>
       )}

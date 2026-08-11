@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ApiError } from '../../api/client';
 import { getAccountByExternalKey, listAccounts } from '../../api/accounts';
 import type { AccountResponse } from '../../api/accounts';
+import { useAuth } from '../../context/AuthContext';
+import { LockedBadge } from '../../components/Locked';
 import './Accounts.css';
 
 /**
@@ -17,6 +19,8 @@ import './Accounts.css';
  */
 export function AccountList() {
   const navigate = useNavigate();
+  const { hasPermission } = useAuth();
+  const canCreateAccount = hasPermission('account:create');
 
   const [accounts, setAccounts] = useState<AccountResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,9 +72,20 @@ export function AccountList() {
     <div className="accounts-page">
       <div className="accounts-page__header">
         <h1>Accounts</h1>
-        <Link to="/accounts/new" className="accounts-btn accounts-btn--primary">
-          Create Account
-        </Link>
+        {canCreateAccount ? (
+          <Link to="/accounts/new" className="accounts-btn accounts-btn--primary">
+            Create Account
+          </Link>
+        ) : (
+          <span
+            className="accounts-btn accounts-btn--primary"
+            aria-disabled="true"
+            style={{ opacity: 0.6, cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+          >
+            Create Account
+            <LockedBadge tooltip="You don't have permission to do this" />
+          </span>
+        )}
       </div>
 
       <form className="accounts-search" onSubmit={handleSearch}>

@@ -4,6 +4,7 @@ import { ApiError } from '../../api/client';
 import { getBundle, getPlans, pauseBundle, resumeBundle } from '../../api/subscriptions';
 import type { BundleResponse, Plan } from '../../api/subscriptions';
 import { LockedBadge } from '../../components/Locked';
+import { useAuth } from '../../context/AuthContext';
 import './BundleList.css';
 
 /**
@@ -24,6 +25,8 @@ export function BundleDetail() {
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionPending, setActionPending] = useState(false);
+  const { hasPermission } = useAuth();
+  const canPauseResume = hasPermission('entitlement:pause_resume');
 
   function reload() {
     if (!bundleId) return;
@@ -80,9 +83,16 @@ export function BundleDetail() {
       {actionError && <div className="bundle-list__error">{actionError}</div>}
 
       <div className="bundle-detail__actions">
-        <button className="bundle-detail__action-btn" onClick={handlePauseResume} disabled={actionPending}>
-          {bundle.isBlocked ? 'Resume' : 'Pause'}
-        </button>
+        {canPauseResume ? (
+          <button className="bundle-detail__action-btn" onClick={handlePauseResume} disabled={actionPending}>
+            {bundle.isBlocked ? 'Resume' : 'Pause'}
+          </button>
+        ) : (
+          <span className="bundle-detail__locked-action">
+            {bundle.isBlocked ? 'Resume' : 'Pause'}
+            <LockedBadge tooltip="You don't have permission to do this" />
+          </span>
+        )}
         <span className="bundle-detail__locked-action">
           Change plan
           <LockedBadge tooltip="Requires a subscription ID, which isn't linkable from a bundle in the current backend API." />
