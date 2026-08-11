@@ -1,0 +1,224 @@
+/*
+ * Shared styles for the Invoices feature area (list, detail, trigger button).
+ * Built from the existing Prodapt UI tokens (see src/styles/tokens.css) and
+ * mirrors the card/table conventions used elsewhere (Login.css).
+ */
+
+.invoices-card {
+  background: var(--prodapt-surface);
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  box-shadow: var(--prodapt-shadow);
+  padding: 20px 24px;
+}
+
+.invoices-card + .invoices-card {
+  margin-top: 20px;
+}
+
+.invoices-empty {
+  color: var(--prodapt-text-muted);
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+.invoices-error {
+  background: rgba(234, 38, 42, 0.08);
+  color: var(--prodapt-danger);
+  border: 1px solid rgba(234, 38, 42, 0.3);
+  border-radius: var(--prodapt-radius);
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.invoices-loading {
+  color: var(--prodapt-text-muted);
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+.invoices-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.invoices-table th {
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--prodapt-text-muted);
+  border-bottom: 1px solid var(--prodapt-border);
+  padding: 8px 12px;
+}
+
+.invoices-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--prodapt-border);
+}
+
+.invoices-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.invoices-table tbody tr.invoices-table__row--clickable {
+  cursor: pointer;
+}
+
+.invoices-table tbody tr.invoices-table__row--clickable:hover {
+  background: var(--prodapt-bg);
+}
+
+.invoices-table td.invoices-table__amount {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.invoice-status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.invoice-status--committed {
+  background: rgba(26, 138, 74, 0.12);
+  color: var(--prodapt-success);
+}
+
+.invoice-status--draft {
+  background: rgba(107, 107, 112, 0.12);
+  color: var(--prodapt-text-muted);
+}
+
+.invoice-status--void {
+  background: rgba(234, 38, 42, 0.1);
+  color: var(--prodapt-danger);
+}
+
+.invoices-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.invoices-header h1,
+.invoices-header h2 {
+  margin: 0;
+}
+
+.invoice-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.invoice-meta-item__label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--prodapt-text-muted);
+  margin-bottom: 4px;
+}
+
+.invoice-meta-item__value {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.invoice-total-row td {
+  font-weight: 700;
+  border-top: 2px solid var(--prodapt-border);
+  border-bottom: none;
+}
+
+.invoices-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: var(--prodapt-radius);
+  background: var(--prodapt-accent);
+  color: var(--prodapt-text-inverse);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.invoices-btn:hover {
+  background: var(--prodapt-accent-hover);
+}
+
+.invoices-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.invoices-btn--secondary {
+  background: var(--prodapt-surface);
+  color: var(--prodapt-text-dark);
+  border: 1px solid var(--prodapt-border);
+}
+
+.invoices-btn--secondary:hover {
+  background: var(--prodapt-bg);
+}
+
+.invoices-btn--small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.invoices-inline-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.invoices-inline-form input[type='date'],
+.invoices-inline-form input[type='text'],
+.invoices-inline-form input[type='number'] {
+  padding: 7px 10px;
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  font-size: 13px;
+}
+
+.invoices-success {
+  background: rgba(26, 138, 74, 0.08);
+  color: var(--prodapt-success);
+  border: 1px solid rgba(26, 138, 74, 0.3);
+  border-radius: var(--prodapt-radius);
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.invoice-adjust-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.invoice-adjust-form input {
+  width: 90px;
+  padding: 5px 8px;
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  font-size: 12px;
+}
+
+.invoices-note {
+  color: var(--prodapt-text-muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
