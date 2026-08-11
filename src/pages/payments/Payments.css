@@ -1,0 +1,310 @@
+/*
+ * Shared styles for the Payments feature area (list, detail, payment
+ * methods, make-a-payment). Built from the existing Prodapt UI tokens (see
+ * src/styles/tokens.css) and mirrors the card/table conventions already
+ * established by the Invoices feature area (src/pages/invoices/Invoices.css).
+ */
+
+.payments-card {
+  background: var(--prodapt-surface);
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  box-shadow: var(--prodapt-shadow);
+  padding: 20px 24px;
+}
+
+.payments-card + .payments-card {
+  margin-top: 20px;
+}
+
+.payments-empty {
+  color: var(--prodapt-text-muted);
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+.payments-error {
+  background: rgba(234, 38, 42, 0.08);
+  color: var(--prodapt-danger);
+  border: 1px solid rgba(234, 38, 42, 0.3);
+  border-radius: var(--prodapt-radius);
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.payments-success {
+  background: rgba(26, 138, 74, 0.08);
+  color: var(--prodapt-success);
+  border: 1px solid rgba(26, 138, 74, 0.3);
+  border-radius: var(--prodapt-radius);
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.payments-loading {
+  color: var(--prodapt-text-muted);
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+.payments-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.payments-header h1,
+.payments-header h2 {
+  margin: 0;
+}
+
+.payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.payments-table th {
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--prodapt-text-muted);
+  border-bottom: 1px solid var(--prodapt-border);
+  padding: 8px 12px;
+}
+
+.payments-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--prodapt-border);
+}
+
+.payments-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.payments-table tbody tr.payments-table__row--clickable {
+  cursor: pointer;
+}
+
+.payments-table tbody tr.payments-table__row--clickable:hover {
+  background: var(--prodapt-bg);
+}
+
+.payments-table td.payments-table__amount {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.payment-status {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.payment-status--success {
+  background: rgba(26, 138, 74, 0.12);
+  color: var(--prodapt-success);
+}
+
+.payment-status--pending {
+  background: rgba(107, 107, 112, 0.12);
+  color: var(--prodapt-text-muted);
+}
+
+.payment-status--payment_failure,
+.payment-status--plugin_failure {
+  background: rgba(234, 38, 42, 0.1);
+  color: var(--prodapt-danger);
+}
+
+.payment-status--refund,
+.payment-status--chargeback {
+  background: rgba(28, 28, 28, 0.06);
+  color: var(--prodapt-text-dark);
+}
+
+.payment-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.payment-meta-item__label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--prodapt-text-muted);
+  margin-bottom: 4px;
+}
+
+.payment-meta-item__value {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.payment-meta-item__value--mono {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.payments-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: var(--prodapt-radius);
+  background: var(--prodapt-accent);
+  color: var(--prodapt-text-inverse);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.payments-btn:hover {
+  background: var(--prodapt-accent-hover);
+}
+
+.payments-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.payments-btn--secondary {
+  background: var(--prodapt-surface);
+  color: var(--prodapt-text-dark);
+  border: 1px solid var(--prodapt-border);
+}
+
+.payments-btn--secondary:hover {
+  background: var(--prodapt-bg);
+}
+
+.payments-btn--small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.payments-btn--danger {
+  background: var(--prodapt-surface);
+  color: var(--prodapt-danger);
+  border: 1px solid rgba(234, 38, 42, 0.35);
+}
+
+.payments-btn--danger:hover {
+  background: rgba(234, 38, 42, 0.08);
+}
+
+.payments-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 420px;
+}
+
+.payments-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.payments-form__field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--prodapt-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.payments-form__field input,
+.payments-form__field select {
+  padding: 8px 10px;
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  font-size: 14px;
+}
+
+.payments-form__row {
+  display: flex;
+  gap: 12px;
+}
+
+.payments-form__row .payments-form__field {
+  flex: 1;
+}
+
+.payments-inline-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.payments-inline-form input[type='number'] {
+  width: 130px;
+  padding: 6px 8px;
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  font-size: 13px;
+}
+
+.payments-mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.payments-mode-toggle button {
+  padding: 6px 12px;
+  border-radius: var(--prodapt-radius);
+  border: 1px solid var(--prodapt-border);
+  background: var(--prodapt-surface);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.payments-mode-toggle button.payments-mode-toggle__btn--active {
+  background: var(--prodapt-accent);
+  color: var(--prodapt-text-inverse);
+  border-color: var(--prodapt-accent);
+}
+
+.payments-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.payments-muted {
+  color: var(--prodapt-text-muted);
+}
+
+.payments-note {
+  font-size: 12px;
+  margin-top: -6px;
+}
+
+.payments-default-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(26, 138, 74, 0.12);
+  color: var(--prodapt-success);
+  margin-left: 8px;
+}
