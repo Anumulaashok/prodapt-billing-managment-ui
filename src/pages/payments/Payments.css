@@ -139,6 +139,12 @@
   margin-bottom: 20px;
 }
 
+.payment-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .payment-meta-item__label {
   display: block;
   font-size: 12px;

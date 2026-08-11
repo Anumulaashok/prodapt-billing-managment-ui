@@ -93,6 +93,10 @@
   color: var(--prodapt-text-muted);
 }
 
+.subscriptions-page__detail {
+  min-width: 0;
+}
+
 .subscriptions-page__detail-header {
   display: flex;
   align-items: center;

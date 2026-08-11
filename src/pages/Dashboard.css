@@ -1,3 +1,7 @@
+.dashboard {
+  max-width: 1080px;
+}
+
 .dashboard__welcome {
   background: var(--prodapt-surface);
   border: 1px solid var(--prodapt-border);
