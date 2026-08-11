@@ -13,12 +13,15 @@ const NAV_ITEMS = [
   { to: '/admin', label: 'Admin' },
 ];
 
-// Deeper Admin sub-sections without a page yet in this scaffold. These are
-// genuinely not built yet (unlike the top-level sections above, which are
-// actively being built next) so they render as inert, locked nav items.
-const LOCKED_ADMIN_ITEMS = [
-  { label: 'Tenants', tooltip: 'Not yet available in Prodapt UI' },
-  { label: 'Users & Permissions', tooltip: 'Not yet available in Prodapt UI' },
+// Sections with no backend support yet. Rendered as inert, locked nav items
+// so they're visible (users know the feature exists) without being clickable
+// dead links. Update this list as backend endpoints for these land.
+const LOCKED_ITEMS = [
+  { label: 'Tags & Custom Fields (global)', tooltip: "Not yet available in Prodapt UI — manage these from an account's detail tabs instead." },
+  { label: 'Tag Definitions', tooltip: 'Not yet available in Prodapt UI' },
+  { label: 'Audit Log', tooltip: 'Not yet available in Prodapt UI' },
+  { label: 'Notification Queues', tooltip: 'Not yet available in Prodapt UI' },
+  { label: 'Catalog & Overdue Config', tooltip: 'Not yet available in Prodapt UI' },
   { label: 'Plugins', tooltip: 'Not yet available in Prodapt UI' },
 ];
 
@@ -56,7 +59,7 @@ export function Layout() {
               </li>
             ))}
             <li className="layout__nav-divider" aria-hidden="true" />
-            {LOCKED_ADMIN_ITEMS.map((item) => (
+            {LOCKED_ITEMS.map((item) => (
               <li key={item.label}>
                 <LockedNavItem label={item.label} tooltip={item.tooltip} />
               </li>

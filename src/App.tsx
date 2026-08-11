@@ -39,7 +39,19 @@ function App() {
                 <Route path="/accounts/:accountId/bundles/:bundleId" element={<BundleDetail />} />
                 <Route path="/accounts/:accountId/subscriptions/new" element={<CreateSubscription />} />
 
-                <Route path="/subscriptions" element={<ComingSoon title="Subscriptions" />} />
+                <Route
+                  path="/subscriptions"
+                  element={
+                    <div>
+                      <h1>Subscriptions</h1>
+                      <p>
+                        The backend has no global subscriptions list, so subscriptions are managed from an
+                        account's Bundles tab: go to Accounts, open an account, and use the Bundles tab to view,
+                        create, pause, or resume subscriptions for that account.
+                      </p>
+                    </div>
+                  }
+                />
 
                 <Route path="/invoices" element={<InvoiceList />} />
                 <Route path="/invoices/:invoiceId" element={<InvoiceDetail />} />
