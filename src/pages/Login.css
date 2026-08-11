@@ -1,0 +1,101 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--prodapt-bg);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--prodapt-surface);
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  box-shadow: var(--prodapt-shadow);
+  padding: 32px;
+}
+
+.login-card__logo {
+  display: block;
+  height: 30px;
+  width: auto;
+  margin: 0 auto 24px;
+}
+
+.login-field {
+  margin-bottom: 16px;
+}
+
+.login-field label {
+  display: block;
+  font-size: 13px;
+  color: var(--prodapt-text-dark);
+  margin-bottom: 6px;
+}
+
+.login-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  font-size: 14px;
+}
+
+.login-field input:focus {
+  outline: none;
+  border-color: var(--prodapt-accent);
+}
+
+.login-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-password-wrapper input {
+  padding-right: 40px;
+}
+
+.login-password-toggle {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--prodapt-text-muted);
+  padding: 4px;
+}
+
+.login-error {
+  background: rgba(234, 38, 42, 0.08);
+  color: var(--prodapt-danger);
+  border: 1px solid rgba(234, 38, 42, 0.3);
+  border-radius: var(--prodapt-radius);
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.login-submit {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: var(--prodapt-radius);
+  background: var(--prodapt-accent);
+  color: var(--prodapt-text-inverse);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-submit:hover {
+  background: var(--prodapt-accent-hover);
+}
+
+.login-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

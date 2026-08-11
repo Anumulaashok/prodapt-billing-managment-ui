@@ -1,0 +1,31 @@
+/*
+ * Prodapt UI design tokens.
+ * CSS custom properties shared across the app. Add new tokens here rather
+ * than hardcoding colors/spacing in component styles.
+ */
+:root {
+  /* Brand */
+  --prodapt-accent: #ea262a;
+  --prodapt-accent-hover: #c81f22;
+  --prodapt-text-dark: #1c1c1c;
+
+  /* Neutrals */
+  --prodapt-bg: #f5f5f7;
+  --prodapt-surface: #ffffff;
+  --prodapt-border: #e2e2e5;
+  --prodapt-text-muted: #6b6b70;
+  --prodapt-text-inverse: #ffffff;
+
+  /* State */
+  --prodapt-danger: #ea262a;
+  --prodapt-success: #1a8a4a;
+  --prodapt-locked: #9a9a9e;
+
+  /* Layout */
+  --prodapt-navbar-height: 60px;
+  --prodapt-sidebar-width: 220px;
+
+  /* Radii / shadows */
+  --prodapt-radius: 6px;
+  --prodapt-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}

@@ -1,0 +1,26 @@
+@import './styles/tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--prodapt-text-dark);
+  background: var(--prodapt-bg);
+}
+
+a {
+  color: var(--prodapt-accent);
+}
+
+button {
+  font-family: inherit;
+}
