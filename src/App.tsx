@@ -15,6 +15,10 @@ import { InvoiceList } from './pages/invoices/InvoiceList';
 import { InvoiceDetail } from './pages/invoices/InvoiceDetail';
 import { PaymentList } from './pages/payments/PaymentList';
 import { PaymentDetail } from './pages/payments/PaymentDetail';
+import { AdminHome } from './pages/admin/AdminHome';
+import { AdminTenants } from './pages/admin/AdminTenants';
+import { AdminUsers } from './pages/admin/AdminUsers';
+import { RoleDefinitions } from './pages/admin/RoleDefinitions';
 
 function App() {
   return (
@@ -43,7 +47,12 @@ function App() {
                 <Route path="/payments" element={<PaymentList />} />
                 <Route path="/payments/:paymentId" element={<PaymentDetail />} />
 
-                <Route path="/admin" element={<ComingSoon title="Admin" />} />
+                <Route path="/admin" element={<AdminHome />}>
+                  <Route index element={<AdminTenants />} />
+                  <Route path="tenants" element={<AdminTenants />} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="roles" element={<RoleDefinitions />} />
+                </Route>
                 <Route path="*" element={<ComingSoon title="Not found" />} />
               </Route>
             </Route>
