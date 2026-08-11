@@ -106,6 +106,14 @@
   color: var(--prodapt-locked);
 }
 
+.bundle-detail {
+  background: var(--prodapt-surface);
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  padding: 1.5rem;
+  max-width: 640px;
+}
+
 .bundle-detail__actions {
   display: flex;
   align-items: center;

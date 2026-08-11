@@ -11,6 +11,7 @@ import { AccountDetail } from './pages/accounts/AccountDetail';
 import { AccountForm } from './pages/accounts/AccountForm';
 import { BundleDetail } from './pages/subscriptions/BundleDetail';
 import { CreateSubscription } from './pages/subscriptions/CreateSubscription';
+import { SubscriptionsHome } from './pages/subscriptions/SubscriptionsHome';
 import { InvoiceList } from './pages/invoices/InvoiceList';
 import { InvoiceDetail } from './pages/invoices/InvoiceDetail';
 import { PaymentList } from './pages/payments/PaymentList';
@@ -43,19 +44,7 @@ function App() {
                 <Route path="/accounts/:accountId/bundles/:bundleId" element={<BundleDetail />} />
                 <Route path="/accounts/:accountId/subscriptions/new" element={<CreateSubscription />} />
 
-                <Route
-                  path="/subscriptions"
-                  element={
-                    <div>
-                      <h1>Subscriptions</h1>
-                      <p>
-                        The backend has no global subscriptions list, so subscriptions are managed from an
-                        account's Bundles tab: go to Accounts, open an account, and use the Bundles tab to view,
-                        create, pause, or resume subscriptions for that account.
-                      </p>
-                    </div>
-                  }
-                />
+                <Route path="/subscriptions" element={<SubscriptionsHome />} />
 
                 <Route path="/invoices" element={<InvoiceList />} />
                 <Route path="/invoices/:invoiceId" element={<InvoiceDetail />} />
