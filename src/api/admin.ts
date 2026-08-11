@@ -59,6 +59,11 @@ export interface RoleResponse {
   permissions: string[];
 }
 
+/** GET /1.0/kb/security/roles — every role defined in this tenant, for populating role pickers. */
+export function listRoles(): Promise<RoleResponse[]> {
+  return apiGet<RoleResponse[]>('/1.0/kb/security/roles');
+}
+
 /** GET /1.0/kb/security/roles/{role} */
 export function getRole(role: string): Promise<RoleResponse> {
   return apiGet<RoleResponse>(`/1.0/kb/security/roles/${encodeURIComponent(role)}`);

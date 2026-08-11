@@ -7,12 +7,50 @@ import {
   createUser,
   disableUser,
   getUserTenants,
+  listRoles,
   listUsers,
 } from '../../api/admin';
-import type { UserResponse, TenantResponse } from '../../api/admin';
+import type { UserResponse, TenantResponse, RoleResponse } from '../../api/admin';
 import { listTenants } from '../../api/admin';
 import { LockedBadge } from '../../components/Locked';
 import './Admin.css';
+
+/** Multi-select role dropdown, populated from GET /1.0/kb/security/roles. */
+function RoleSelect({
+  availableRoles,
+  selected,
+  onChange,
+}: {
+  availableRoles: RoleResponse[];
+  selected: string[];
+  onChange: (roles: string[]) => void;
+}) {
+  return (
+    <select
+      multiple
+      value={selected}
+      onChange={(e) => onChange(Array.from(e.target.selectedOptions, (o) => o.value))}
+      style={{
+        padding: '0.5rem 0.65rem',
+        borderRadius: 'var(--prodapt-radius)',
+        border: '1px solid var(--prodapt-border)',
+        fontSize: '0.875rem',
+        minHeight: '6rem',
+      }}
+    >
+      {availableRoles.length === 0 && (
+        <option disabled value="">
+          No roles defined yet — create one under Role Definitions
+        </option>
+      )}
+      {availableRoles.map((r) => (
+        <option key={r.role} value={r.role}>
+          {r.role}
+        </option>
+      ))}
+    </select>
+  );
+}
 
 /** Admin > Users & Permissions — /admin/users. List, create, assign roles/tenants. */
 export function AdminUsers() {
@@ -20,6 +58,7 @@ export function AdminUsers() {
   const isRoot = currentUser?.isRoot ?? false;
 
   const [users, setUsers] = useState<UserResponse[]>([]);
+  const [availableRoles, setAvailableRoles] = useState<RoleResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -34,6 +73,13 @@ export function AdminUsers() {
   }
 
   useEffect(reload, []);
+  useEffect(() => {
+    listRoles()
+      .then(setAvailableRoles)
+      .catch(() => undefined);
+  }, []);
+
+  const expandedUser = users.find((u) => u.username === expanded) ?? null;
 
   return (
     <div>
@@ -83,27 +129,38 @@ export function AdminUsers() {
         </table>
       )}
 
-      {expanded && (
-        <UserDetailPanel username={expanded} isRoot={isRoot} onChanged={reload} onClose={() => setExpanded(null)} />
+      {expandedUser && (
+        <UserDetailPanel
+          username={expandedUser.username}
+          initialRoles={expandedUser.roles}
+          availableRoles={availableRoles}
+          isRoot={isRoot}
+          onChanged={reload}
+          onClose={() => setExpanded(null)}
+        />
       )}
 
-      <CreateUserPanel onCreated={reload} />
+      <CreateUserPanel availableRoles={availableRoles} onCreated={reload} />
     </div>
   );
 }
 
 function UserDetailPanel({
   username,
+  initialRoles,
+  availableRoles,
   isRoot,
   onChanged,
   onClose,
 }: {
   username: string;
+  initialRoles: string[];
+  availableRoles: RoleResponse[];
   isRoot: boolean;
   onChanged: () => void;
   onClose: () => void;
 }) {
-  const [rolesInput, setRolesInput] = useState('');
+  const [selectedRoles, setSelectedRoles] = useState<string[]>(initialRoles);
   const [savingRoles, setSavingRoles] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -126,14 +183,10 @@ function UserDetailPanel({
 
   async function handleSaveRoles(e: FormEvent) {
     e.preventDefault();
-    const roles = rolesInput
-      .split(',')
-      .map((r) => r.trim())
-      .filter(Boolean);
     setSavingRoles(true);
     setError(null);
     try {
-      await assignUserRoles(username, roles);
+      await assignUserRoles(username, selectedRoles);
       onChanged();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to update roles.');
@@ -180,12 +233,8 @@ function UserDetailPanel({
       {error && <div className="admin-error">{error}</div>}
 
       <form onSubmit={handleSaveRoles} className="admin-form__field">
-        <label>Roles (comma-separated)</label>
-        <input
-          placeholder="tenant_admin, support"
-          value={rolesInput}
-          onChange={(e) => setRolesInput(e.target.value)}
-        />
+        <label>Roles (ctrl/cmd-click to select multiple)</label>
+        <RoleSelect availableRoles={availableRoles} selected={selectedRoles} onChange={setSelectedRoles} />
         <div className="admin-form__actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={savingRoles}>
             {savingRoles ? 'Saving…' : 'Save Roles'}
@@ -235,10 +284,16 @@ function UserDetailPanel({
   );
 }
 
-function CreateUserPanel({ onCreated }: { onCreated: () => void }) {
+function CreateUserPanel({
+  availableRoles,
+  onCreated,
+}: {
+  availableRoles: RoleResponse[];
+  onCreated: () => void;
+}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [roles, setRoles] = useState('');
+  const [roles, setRoles] = useState<string[]>([]);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -247,17 +302,10 @@ function CreateUserPanel({ onCreated }: { onCreated: () => void }) {
     setCreating(true);
     setError(null);
     try {
-      await createUser(
-        username.trim(),
-        password,
-        roles
-          .split(',')
-          .map((r) => r.trim())
-          .filter(Boolean),
-      );
+      await createUser(username.trim(), password, roles);
       setUsername('');
       setPassword('');
-      setRoles('');
+      setRoles([]);
       onCreated();
     } catch (err) {
       setError(err instanceof ApiError ? `Failed to create user: ${err.message}` : 'Failed to create user.');
@@ -280,8 +328,8 @@ function CreateUserPanel({ onCreated }: { onCreated: () => void }) {
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
         <div className="admin-form__field">
-          <label>Roles (comma-separated)</label>
-          <input placeholder="tenant_admin" value={roles} onChange={(e) => setRoles(e.target.value)} />
+          <label>Roles (ctrl/cmd-click to select multiple)</label>
+          <RoleSelect availableRoles={availableRoles} selected={roles} onChange={setRoles} />
         </div>
         <button type="submit" className="admin-btn admin-btn--primary" disabled={creating}>
           {creating ? 'Creating…' : 'Create User'}
