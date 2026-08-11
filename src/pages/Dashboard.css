@@ -1,0 +1,64 @@
+.dashboard__welcome {
+  background: var(--prodapt-surface);
+  border: 1px solid var(--prodapt-border);
+  border-radius: var(--prodapt-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.dashboard__welcome h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  color: var(--prodapt-text-dark);
+}
+
+.dashboard__welcome p {
+  margin: 0;
+  color: var(--prodapt-text-muted);
+  font-size: 0.9rem;
+}
+
+.dashboard__warning {
+  color: var(--prodapt-danger) !important;
+}
+
+.dashboard__section-title {
+  font-size: 1rem;
+  color: var(--prodapt-text-dark);
+  margin: 0 0 0.75rem;
+}
+
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.dashboard__card {
+  display: block;
+  padding: 1.1rem;
+  border-radius: var(--prodapt-radius);
+  border: 1px solid var(--prodapt-border);
+  background: var(--prodapt-surface);
+  text-decoration: none;
+  color: var(--prodapt-text-dark);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.dashboard__card:hover {
+  border-color: var(--prodapt-accent);
+  box-shadow: var(--prodapt-shadow);
+  transform: translateY(-1px);
+}
+
+.dashboard__card strong {
+  font-size: 0.95rem;
+}
+
+.dashboard__card p {
+  margin: 0.4rem 0 0;
+  font-size: 0.82rem;
+  color: var(--prodapt-text-muted);
+  line-height: 1.4;
+}

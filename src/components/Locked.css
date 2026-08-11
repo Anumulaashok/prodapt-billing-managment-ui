@@ -29,12 +29,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 9px 12px;
   color: var(--prodapt-locked);
   cursor: not-allowed;
   user-select: none;
 }
 
 .locked-nav-item__label {
-  font-size: 14px;
+  font-size: 13px;
 }

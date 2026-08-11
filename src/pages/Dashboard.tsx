@@ -1,46 +1,70 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTenant } from '../context/TenantContext';
+import './Dashboard.css';
 
-const QUICK_LINKS = [
+const TENANT_LINKS = [
   { to: '/accounts', label: 'Accounts', desc: 'Search, create, and manage customer accounts.' },
   { to: '/invoices', label: 'Invoices', desc: 'Browse invoices and trigger manual runs.' },
   { to: '/payments', label: 'Payments', desc: 'View payments, methods, refunds, and chargebacks.' },
-  { to: '/admin/tenants', label: 'Admin: Tenants', desc: 'Register and list tenants.' },
-  { to: '/admin/users', label: 'Admin: Users', desc: 'Manage staff logins, roles, and tenant access.' },
+  { to: '/admin/users', label: 'Users & Permissions', desc: 'Manage logins, roles, and (for root) tenant access.' },
+];
+
+const ROOT_ONLY_LINKS = [
+  { to: '/admin/tenants', label: 'Tenants', desc: 'Provision and list every tenant on the platform.' },
+  { to: '/admin/roles', label: 'Role Definitions', desc: 'Define permission sets that roles grant.' },
 ];
 
 export function Dashboard() {
   const { currentUser } = useAuth();
-  const { currentTenant } = useTenant();
+  const { currentTenant, availableTenants, loading } = useTenant();
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>
-        Welcome{currentUser ? `, ${currentUser.username}` : ''}. Current tenant:{' '}
-        <strong>{currentTenant.name}</strong>.
-      </p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
-        {QUICK_LINKS.map((link) => (
-          <Link
-            key={link.to}
-            to={link.to}
-            style={{
-              display: 'block',
-              padding: '1rem',
-              borderRadius: 'var(--prodapt-radius)',
-              border: '1px solid var(--prodapt-border)',
-              background: 'var(--prodapt-surface)',
-              textDecoration: 'none',
-              color: 'var(--prodapt-text-dark)',
-            }}
-          >
+    <div className="dashboard">
+      <div className="dashboard__welcome">
+        <h1>Welcome{currentUser ? `, ${currentUser.username}` : ''}</h1>
+        {currentUser?.isRoot ? (
+          <p>
+            You're signed in as the <strong>root admin</strong> — provision tenants and staff logins from Admin,
+            or pick a tenant above to browse its accounts, subscriptions, and invoices.
+          </p>
+        ) : loading ? (
+          <p>Loading your tenant…</p>
+        ) : currentTenant ? (
+          <p>
+            Everything below is scoped to your tenant, <strong>{currentTenant.externalKey || currentTenant.tenantId}</strong>.
+            {availableTenants.length > 1 && ' Switch tenants using the picker in the top bar.'}
+          </p>
+        ) : (
+          <p className="dashboard__warning">
+            No tenant is assigned to your account yet — ask your admin to grant you access under Admin → Users.
+          </p>
+        )}
+      </div>
+
+      <h2 className="dashboard__section-title">Get started</h2>
+      <div className="dashboard__grid">
+        {TENANT_LINKS.map((link) => (
+          <Link key={link.to} to={link.to} className="dashboard__card">
             <strong>{link.label}</strong>
-            <p style={{ margin: '0.35rem 0 0', fontSize: '0.85rem', color: 'var(--prodapt-text-muted)' }}>{link.desc}</p>
+            <p>{link.desc}</p>
           </Link>
         ))}
       </div>
+
+      {currentUser?.isRoot && (
+        <>
+          <h2 className="dashboard__section-title">Platform administration</h2>
+          <div className="dashboard__grid">
+            {ROOT_ONLY_LINKS.map((link) => (
+              <Link key={link.to} to={link.to} className="dashboard__card">
+                <strong>{link.label}</strong>
+                <p>{link.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -20,28 +20,25 @@ export const API_BASE_URL: string =
   (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? DEFAULT_BASE_URL;
 
 export const AUTH_TOKEN_STORAGE_KEY = 'prodapt_auth_token';
-export const CURRENT_TENANT_STORAGE_KEY = 'prodapt_current_tenant';
-
-export interface StoredTenant {
-  name: string;
-  apiKey: string;
-  apiSecret: string;
-}
+export const CURRENT_TENANT_STORAGE_KEY = 'prodapt_current_tenant_id';
 
 /** Reads the persisted auth token directly from localStorage. */
 function readAuthToken(): string | null {
   return localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
 }
 
-/** Reads the persisted current tenant directly from localStorage. */
-function readCurrentTenant(): StoredTenant | null {
-  try {
-    const raw = localStorage.getItem(CURRENT_TENANT_STORAGE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as StoredTenant;
-  } catch {
-    return null;
-  }
+/**
+ * Reads the persisted current tenant ID directly from localStorage.
+ *
+ * The backend never hands a JWT-authenticated caller a tenant's raw API
+ * secret (it's shown once at tenant creation and never again) -- billing
+ * requests are scoped by tenant ID instead: TenantAuthInterceptor resolves
+ * the tenant from the caller's JWT identity + this ID, and independently
+ * enforces that the caller is actually allowed to access it. Sending a
+ * tenant ID you don't have access to gets a 403, not another tenant's data.
+ */
+function readCurrentTenantId(): string | null {
+  return localStorage.getItem(CURRENT_TENANT_STORAGE_KEY);
 }
 
 /** Clears persisted auth state (used on 401 responses). */
@@ -81,10 +78,9 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     finalHeaders['Authorization'] = `Bearer ${token}`;
   }
 
-  const tenant = readCurrentTenant();
-  if (tenant) {
-    finalHeaders['X-Killbill-ApiKey'] = tenant.apiKey;
-    finalHeaders['X-Killbill-ApiSecret'] = tenant.apiSecret;
+  const tenantId = readCurrentTenantId();
+  if (tenantId) {
+    finalHeaders['X-Prodapt-TenantId'] = tenantId;
   }
 
   let requestBody: BodyInit | undefined;
