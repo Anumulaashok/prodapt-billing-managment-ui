@@ -50,6 +50,22 @@ const ICONS: Record<string, ReactElement> = {
       <path d="M12 2 3 6v6c0 5 3.8 9.4 9 10 5.2-.6 9-5 9-10V6l-9-4Z" />
     </svg>
   ),
+  tag: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3l.24 5.59a2 2 0 0 0 .59 1.41l9.59 9.59a2 2 0 0 0 2.83 0l3.34-3.34a2 2 0 0 0 0-2.83Z" />
+      <circle cx="7.5" cy="7.5" r="1.5" fill="currentColor" stroke="none" />
+    </svg>
+  ),
+  queue: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="8" y1="6" x2="21" y2="6" />
+      <line x1="8" y1="12" x2="21" y2="12" />
+      <line x1="8" y1="18" x2="21" y2="18" />
+      <line x1="3" y1="6" x2="3.01" y2="6" />
+      <line x1="3" y1="12" x2="3.01" y2="12" />
+      <line x1="3" y1="18" x2="3.01" y2="18" />
+    </svg>
+  ),
 };
 
 const NAV_ITEMS = [
@@ -58,6 +74,10 @@ const NAV_ITEMS = [
   { to: '/subscriptions', label: 'Subscriptions', icon: 'subscriptions' },
   { to: '/invoices', label: 'Invoices', icon: 'invoices' },
   { to: '/payments', label: 'Payments', icon: 'payments' },
+  { to: '/tags/definitions', label: 'Tag Definitions', icon: 'tag' },
+  { to: '/tags', label: 'Global Tags', icon: 'tag' },
+  { to: '/custom-fields', label: 'Global Custom Fields', icon: 'tag' },
+  { to: '/queues', label: 'Notification Queues', icon: 'queue' },
   { to: '/admin', label: 'Admin', icon: 'admin' },
 ];
 
@@ -65,10 +85,6 @@ const NAV_ITEMS = [
 // so they're visible (users know the feature exists) without being clickable
 // dead links. Update this list as backend endpoints for these land.
 const LOCKED_ITEMS = [
-  { label: 'Tags & Custom Fields (global)', tooltip: "Not yet available in Prodapt UI — manage these from an account's detail tabs instead." },
-  { label: 'Tag Definitions', tooltip: 'Not yet available in Prodapt UI' },
-  { label: 'Audit Log', tooltip: 'Not yet available in Prodapt UI' },
-  { label: 'Notification Queues', tooltip: 'Not yet available in Prodapt UI' },
   { label: 'Catalog & Overdue Config', tooltip: 'Not yet available in Prodapt UI' },
   { label: 'Plugins', tooltip: 'Not yet available in Prodapt UI' },
 ];

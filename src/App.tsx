@@ -19,6 +19,10 @@ import { AdminHome } from './pages/admin/AdminHome';
 import { AdminTenants } from './pages/admin/AdminTenants';
 import { AdminUsers } from './pages/admin/AdminUsers';
 import { RoleDefinitions } from './pages/admin/RoleDefinitions';
+import { TagDefinitions } from './pages/tags/TagDefinitions';
+import { GlobalTags } from './pages/tags/GlobalTags';
+import { GlobalCustomFields } from './pages/customFields/GlobalCustomFields';
+import { Queues } from './pages/queues/Queues';
 
 function App() {
   return (
@@ -58,6 +62,11 @@ function App() {
 
                 <Route path="/payments" element={<PaymentList />} />
                 <Route path="/payments/:paymentId" element={<PaymentDetail />} />
+
+                <Route path="/tags/definitions" element={<TagDefinitions />} />
+                <Route path="/tags" element={<GlobalTags />} />
+                <Route path="/custom-fields" element={<GlobalCustomFields />} />
+                <Route path="/queues" element={<Queues />} />
 
                 <Route path="/admin" element={<AdminHome />}>
                   <Route index element={<AdminTenants />} />

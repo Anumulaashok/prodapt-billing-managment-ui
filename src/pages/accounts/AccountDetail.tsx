@@ -26,10 +26,20 @@ import type {
 import { BundleList } from '../subscriptions/BundleList';
 import { InvoiceList } from '../invoices/InvoiceList';
 import { PaymentList } from '../payments/PaymentList';
+import { AuditLog } from '../audit/AuditLog';
 import { LockedBadge } from '../../components/Locked';
 import './Accounts.css';
 
-type TabKey = 'info' | 'bundles' | 'invoices' | 'payments' | 'tags' | 'customFields' | 'emails' | 'overdue';
+type TabKey =
+  | 'info'
+  | 'bundles'
+  | 'invoices'
+  | 'payments'
+  | 'tags'
+  | 'customFields'
+  | 'emails'
+  | 'overdue'
+  | 'auditLog';
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: 'info', label: 'Info' },
@@ -40,6 +50,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'customFields', label: 'Custom Fields' },
   { key: 'emails', label: 'Emails' },
   { key: 'overdue', label: 'Overdue' },
+  { key: 'auditLog', label: 'Audit Log' },
 ];
 
 /**
@@ -120,6 +131,7 @@ export function AccountDetail() {
             {tab === 'customFields' && <AccountCustomFieldsPanel accountId={accountId} />}
             {tab === 'emails' && <AccountEmailsPanel accountId={accountId} />}
             {tab === 'overdue' && <AccountOverduePanel accountId={accountId} />}
+            {tab === 'auditLog' && <AuditLog accountId={accountId} />}
           </div>
         </>
       )}
